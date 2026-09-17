@@ -49,11 +49,17 @@ python3 ghosthunt.py         # opens the menu
 - Linux (Kali recommended; Fedora/Arch/openSUSE supported), Python 3.12+
 - Docker (for Strix), Go (for ProjectDiscovery tools), optional Ollama for free local AI
 
-## Engines & playbooks (not bundled)
-The AI methodology and heavy engines are third-party projects with their own licenses and are
-**not** redistributed here. Clone them yourself and point the app at them with
-`BOUNTY_ENGINES_DIR=/path/to/engines`. Recommended: `nighwatch`, `strix`, `pwn` (methodology),
-`claude-red` (playbooks).
+## Engines & playbooks
+**Nightwatch is bundled.** GHOSTHUNT ships with its own scope-enforced control-plane engine
+(`engines/nighwatch`, MIT © Snak3Gh0st) — no separate install needed. `nightwatch config` /
+`nightwatch run` resolve the bundled copy automatically (or an installed `nighwatch` on PATH,
+or `NIGHTWATCH_BIN`). It vendors [Strix](https://github.com/usestrix/strix) (Apache-2.0) under
+`engines/nighwatch/vendor/strix`; see `engines/nighwatch/THIRD_PARTY_NOTICES.md`.
+
+The other heavy engines and methodology repos are third-party projects with their own licenses
+and are **not** redistributed here. Clone them yourself and point the app at them with
+`BOUNTY_ENGINES_DIR=/path/to/engines`. Recommended: `strix`, `pwn` (methodology),
+`claude-red` (playbooks), `airecon` (recon).
 
 ## Configuration
 Run `python3 ghosthunt.py` → `[k]`, or copy `.env.example` to `~/.bounty.env` and fill in:

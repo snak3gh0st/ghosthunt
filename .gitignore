@@ -7,7 +7,9 @@ strix_runs/
 *.log
 
 # --- third-party engines (users install these themselves; licensing) ---
-engines/
+# Nightwatch is our own engine and ships bundled; everything else stays out.
+engines/*
+!engines/nighwatch/
 vm/
 
 # --- dev copies / build junk ---

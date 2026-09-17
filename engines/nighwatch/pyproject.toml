@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nighwatch"
+version = "0.1.0"
+description = "Nighwatch: Linux-first, scope-enforced AI security testing control plane"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+authors = [
+  { name = "snak3gh0st" },
+]
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0",
+]
+browser = [
+  "playwright>=1.40,<2",
+]
+
+[project.scripts]
+nighwatch = "agentsec.cli:main"
+nightwatch = "agentsec.cli:main"
+agentsec = "agentsec.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

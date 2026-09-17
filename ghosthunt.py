@@ -1027,9 +1027,10 @@ def cmd_doctor(_: argparse.Namespace) -> None:
         or shutil.which("nighwatch")
         or shutil.which("nightwatch")
         or shutil.which("agentsec")
+        or (ENGINES_DIR / "nighwatch" / "src").exists()  # bundled copy
     )
     engines = {
-        "nightwatch (scope-enforced control plane)": bool(nightwatch),
+        "nightwatch (scope-enforced control plane, bundled)": bool(nightwatch),
         "airecon (autonomous recon)": bool(shutil.which("airecon")),
         "strix (validation)": bool(shutil.which("strix")),
         "ollama (local reasoning, no API cost)": bool(shutil.which("ollama")),
@@ -1326,15 +1327,27 @@ NIGHTWATCH_NEEDS_CONFIG = {
 }
 
 
-def _nightwatch_cmd() -> list[str]:
+def _nightwatch_cmd() -> tuple[list[str], dict | None]:
+    """Resolve the Nighwatch CLI, preferring the copy bundled in this repo.
+
+    Order: NIGHTWATCH_BIN override → an installed binary on PATH → the bundled
+    source under engines/nighwatch/src run via PYTHONPATH (no separate install
+    needed, since Nighwatch ships with GHOSTHUNT). Returns (command, env).
+    """
     override = os.environ.get("NIGHTWATCH_BIN")
     if override:
-        return shlex.split(override)
+        return shlex.split(override), None
     for name in ("nighwatch", "nightwatch", "agentsec"):
         found = shutil.which(name)
         if found:
-            return [found]
-    return [sys.executable, "-m", "nighwatch"]
+            return [found], None
+    bundled_src = ENGINES_DIR / "nighwatch" / "src"
+    if bundled_src.exists():
+        env = dict(os.environ)
+        path = str(bundled_src.resolve())
+        env["PYTHONPATH"] = path + (os.pathsep + env["PYTHONPATH"] if env.get("PYTHONPATH") else "")
+        return [sys.executable, "-m", "nighwatch"], env
+    return [sys.executable, "-m", "nighwatch"], None
 
 
 def cmd_nightwatch_config(args: argparse.Namespace) -> None:
@@ -1437,14 +1450,15 @@ def cmd_nightwatch_run(args: argparse.Namespace) -> None:
         if not config.exists():
             die("no Nighwatch config yet; run: ghosthunt nightwatch config")
         passthrough += ["--config", str(config)]
-    command = _nightwatch_cmd() + passthrough
+    base, env = _nightwatch_cmd()
+    command = base + passthrough
     print(paint(f"→ {shlex.join(command)}", DIM))
     try:
-        completed = subprocess.run(command)
+        completed = subprocess.run(command, env=env)
     except FileNotFoundError:
         die(
-            "Nighwatch not found. Install it in the VM "
-            "(pip install -e /path/to/nighwatch) or set NIGHTWATCH_BIN."
+            "Nighwatch not found. It ships bundled at engines/nighwatch — "
+            "check that directory exists, or set NIGHTWATCH_BIN / BOUNTY_ENGINES_DIR."
         )
     raise SystemExit(completed.returncode)
 
