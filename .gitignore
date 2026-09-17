@@ -1,0 +1,19 @@
+# --- secrets & local state (NEVER commit) ---
+.env
+.env.local
+*.env
+.bounty/
+strix_runs/
+*.log
+
+# --- third-party engines (users install these themselves; licensing) ---
+engines/
+vm/
+
+# --- dev copies / build junk ---
+bounty.py
+bounty2.py
+gh.py
+__pycache__/
+*.pyc
+.DS_Store
