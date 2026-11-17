@@ -1,0 +1,8 @@
+{
+  "commix": {
+    "repository": "commixproject/commix",
+    "commit": "7bf1fec3b46d82b0a2d9366eff65cc148e5ad7e9"
+  },
+  "wpscanVersion": "4.2.0",
+  "zapImage": "ghcr.io/zaproxy/zaproxy@sha256:9624669db72f54d86c4b46a7064518bd9bf79d8c61a4c31befa9923489f328af"
+}

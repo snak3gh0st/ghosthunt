@@ -1,0 +1,7 @@
+name: base
+channels:
+  - conda-forge
+channel_priority: strict
+dependencies:
+  - python=3.12
+  - nodejs=22

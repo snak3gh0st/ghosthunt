@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Small, scope-first bug bounty copilot for an isolated Linux VM.
 
-It deliberately stays boring: no web UI, no autonomous exploitation, no shell=True.
+The native CLI is also driven by the authenticated web command center. No shell=True.
 The operator chooses the target, approves active commands, and keeps the evidence.
 """
 
@@ -24,7 +24,7 @@ import urllib.request
 from pathlib import Path
 
 
-BASE = Path.cwd() / ".bounty"
+BASE = Path(os.environ.get("GHOSTHUNT_SESSION_ROOT", str(Path.cwd() / ".bounty"))).resolve()
 POINTER = BASE / "CURRENT"
 
 # These are (re)bound to the active engagement directory by _bind_paths().
@@ -66,6 +66,12 @@ def _use_engagement(name: str) -> None:
 
 
 def _load_active_engagement() -> None:
+    explicit = os.environ.get("GHOSTHUNT_ENGAGEMENT")
+    if explicit is not None:
+        if not re.fullmatch(r"[a-z0-9][a-z0-9-]{0,79}", explicit):
+            die("invalid GHOSTHUNT_ENGAGEMENT")
+        _bind_paths(BASE / "engagements" / explicit)
+        return
     try:
         slug = POINTER.read_text(encoding="utf-8").strip()
     except OSError:
@@ -451,6 +457,8 @@ def execute_command(command: list[str], target: str, state: dict, *, confirm: bo
     command = list(command)
     if command and command[0] == "--":
         command.pop(0)
+    if state.get("web_managed"):
+        die("web-managed scope: execute target tools through the scoped web command center")
     validate_command(command, target, state)
     executable = Path(command[0]).name
     if executable in INTRUSIVE_TOOLS and not confirm:
@@ -474,12 +482,20 @@ def execute_command(command: list[str], target: str, state: dict, *, confirm: bo
     )
     print(f"Running inside the authorized session: {shlex.join(command)}")
     try:
-        completed = subprocess.run(command, text=True, capture_output=True, check=False)
+        completed = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1)
     except OSError as exc:
         die(f"failed to run tool: {exc}")
-    output = completed.stdout + ("\n" + completed.stderr if completed.stderr else "")
-    evidence_path.write_text(header + output, encoding="utf-8", errors="replace")
-    print(output, end="")
+    with evidence_path.open("w", encoding="utf-8", errors="replace") as evidence:
+        evidence.write(header)
+        assert completed.stdout is not None
+        try:
+            for line in completed.stdout:
+                print(line, end="", flush=True)
+                evidence.write(line)
+                evidence.flush()
+        except KeyboardInterrupt:
+            completed.terminate()
+        completed.wait()
     print(f"\nEvidence saved to {evidence_path} (exit {completed.returncode})")
     return completed.returncode, evidence_path
 
@@ -869,7 +885,7 @@ def cmd_hunt(args: argparse.Namespace) -> None:
 
 
 def _llm_is_local(explicit: bool = False) -> bool:
-    return explicit or os.environ.get("BOUNTY_LLM", "").lower() in ("local", "ollama")
+    return explicit or os.environ.get("BOUNTY_LLM", "local").lower() in ("local", "ollama")
 
 
 def llm_request(prompt: str, state: dict, local: bool = False) -> str:
@@ -1602,7 +1618,7 @@ def cmd_engine_run(args: argparse.Namespace) -> None:
     raise SystemExit(completed.returncode)
 
 
-PLAYBOOK_DIRS = [ENGINES_DIR / "pwn" / "skills", ENGINES_DIR / "claude-red" / "Skills"]
+PLAYBOOK_DIRS = [ENGINES_DIR / "pwn" / "skills", ENGINES_DIR / "claude-red" / "Skills", Path(os.environ.get("GHOSTHUNT_KNOWLEDGE_DIR", str(BASE / "web" / "integrations"))) / "claude-bughunter" / "skills", Path(os.environ.get("GHOSTHUNT_KNOWLEDGE_DIR", str(BASE / "web" / "integrations"))) / "claude-osint" / "skills"]
 
 
 def _list_playbooks() -> list[tuple[str, Path]]:
@@ -1689,7 +1705,7 @@ def cmd_play(args: argparse.Namespace) -> None:
     if args.play_command == "list":
         section("Methodology playbooks (pwn + claude-red)")
         for pname, path in playbooks:
-            src = "pwn" if f"{os.sep}pwn{os.sep}" in str(path) else "claude-red"
+            src = next((base.parent.name for base in PLAYBOOK_DIRS if path.is_relative_to(base)), "unknown")
             print(f"  {paint(pname, GREEN):40} [{src}]")
         print("\nRead one:  ghosthunt play show <name>")
         print("Use in AI: ghosthunt ask --play <name> \"your question\"")
@@ -2046,6 +2062,17 @@ def cmd_menu(_: argparse.Namespace) -> None:
             pass
 
 
+def cmd_web_manifest(_: argparse.Namespace) -> None:
+    tools = []
+    for name in sorted(SAFE_TOOLS | ACTIVE_TOOLS | INTRUSIVE_TOOLS):
+        tools.append({"id": name, "installed": bool(shutil.which(name)), "mode": "intrusive" if name in INTRUSIVE_TOOLS else "active" if name in ACTIVE_TOOLS else "discovery"})
+    engines = []
+    for name, meta in ENGINES.items():
+        command, _env = _resolve_engine(name, meta) if meta["kind"] == "cli" else (None, None)
+        engines.append({"id": name, "role": meta["role"], "phase": meta["phase"], "kind": meta["kind"], "available": bool(command) if meta["kind"] == "cli" else (ENGINES_DIR / name).exists()})
+    print(json.dumps({"application": "Ghosthunt", "core": str(Path(__file__).resolve()), "python": sys.version.split()[0], "tools": tools, "engines": engines}))
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="ghosthunt", description="GHOSTHUNT — scope-first bug bounty command console"
@@ -2054,6 +2081,8 @@ def build_parser() -> argparse.ArgumentParser:
 
     menu = sub.add_parser("menu", help="interactive command console (default when no command given)")
     menu.set_defaults(func=cmd_menu)
+    manifest = sub.add_parser("web-manifest", help="machine-readable tool and engine inventory (no execution)")
+    manifest.set_defaults(func=cmd_web_manifest)
 
     hunt = sub.add_parser("hunt", help="full auto pipeline: recon -> scan -> AI triage -> report")
     hunt.add_argument("--confirm", action="store_true", help="acknowledge active scanning is allowed by the program")
@@ -2203,7 +2232,8 @@ def main() -> None:
     _load_active_engagement()
     parser = build_parser()
     args = parser.parse_args()
-    banner()
+    if args.command != "web-manifest":
+        banner()
     if not getattr(args, "func", None):
         cmd_menu(args)
         return

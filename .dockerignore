@@ -1,0 +1,10 @@
+.git
+.bounty
+.env*
+**/node_modules
+**/dist
+**/__pycache__
+dashboard
+tests
+engines
+*.log

@@ -1,0 +1,205 @@
+{
+  "platform": "linux/arm64",
+  "goBuilder": "golang@sha256:4fa7c968ba93f1635670522dbb01a2c78150443e1385746924566079f36570ea",
+  "binaries": [
+    {
+      "id": "amass",
+      "repository": "owasp-amass/amass",
+      "version": "v5.1.3",
+      "url": "https://github.com/owasp-amass/amass/releases/download/v5.1.3/amass_linux_arm64.tar.gz",
+      "asset": "amass_linux_arm64.tar.gz",
+      "sha256": "02316f4e5703420cd86890c3c61f6d56ed10277d2bfea076d4e5cfd1a6b6099a",
+      "binary": "amass"
+    },
+    {
+      "id": "cdncheck",
+      "repository": "projectdiscovery/cdncheck",
+      "version": "v1.4.0",
+      "url": "https://github.com/projectdiscovery/cdncheck/releases/download/v1.4.0/cdncheck_1.4.0_linux_arm64.zip",
+      "asset": "cdncheck_1.4.0_linux_arm64.zip",
+      "sha256": "0160e28ddd88ae631485fbb4790fbbc081dda4db9df416528d93d5378814960d",
+      "binary": "cdncheck"
+    },
+    {
+      "id": "dalfox",
+      "repository": "hahwul/dalfox",
+      "version": "v3.3.0",
+      "url": "https://github.com/hahwul/dalfox/releases/download/v3.3.0/dalfox-v3.3.0-linux-aarch64-musl.tar.gz",
+      "asset": "dalfox-v3.3.0-linux-aarch64-musl.tar.gz",
+      "sha256": "f63b98296b56f0575df5a4539ce1806f07218100d18d87d8db512648b6c5c6cb",
+      "binary": "dalfox"
+    },
+    {
+      "id": "ffuf",
+      "repository": "ffuf/ffuf",
+      "version": "v2.3.0",
+      "url": "https://github.com/ffuf/ffuf/releases/download/v2.3.0/ffuf_2.3.0_linux_arm64.tar.gz",
+      "asset": "ffuf_2.3.0_linux_arm64.tar.gz",
+      "sha256": "e2d712615d53da797ee929006e41f2df5a7960a5353133db9c150ddaa22ae4e8",
+      "binary": "ffuf"
+    },
+    {
+      "id": "gobuster",
+      "repository": "OJ/gobuster",
+      "version": "v3.8.2",
+      "url": "https://github.com/OJ/gobuster/releases/download/v3.8.2/gobuster_Linux_arm64.tar.gz",
+      "asset": "gobuster_Linux_arm64.tar.gz",
+      "sha256": "84b175ae5ae770efddb3e675b0e24e56ef0f484a0d751beff0b0629e52c7f4da",
+      "binary": "gobuster"
+    },
+    {
+      "id": "gospider",
+      "repository": "jaeles-project/gospider",
+      "version": "v1.1.6",
+      "url": "https://github.com/jaeles-project/gospider/releases/download/v1.1.6/gospider_v1.1.6_linux_arm64.zip",
+      "asset": "gospider_v1.1.6_linux_arm64.zip",
+      "sha256": "39b78dc7deb2fb3e271aded05b6d7e47a395cd743f07bfdbfc0ee5083ba30b0e",
+      "binary": "gospider"
+    },
+    {
+      "id": "gowitness",
+      "repository": "sensepost/gowitness",
+      "version": "3.2.2",
+      "url": "https://github.com/sensepost/gowitness/releases/download/3.2.2/gowitness-3.2.2-linux-arm64",
+      "asset": "gowitness-3.2.2-linux-arm64",
+      "sha256": "207f4abd2e6129f601346e44a3768e0549dd39a4498ee8602b1774b1a100c477",
+      "binary": "gowitness"
+    },
+    {
+      "id": "katana",
+      "repository": "projectdiscovery/katana",
+      "version": "v1.8.0",
+      "url": "https://github.com/projectdiscovery/katana/releases/download/v1.8.0/katana_1.8.0_linux_arm64.zip",
+      "asset": "katana_1.8.0_linux_arm64.zip",
+      "sha256": "80e269210727a855511ffac8dfb01297b2344742acec71a35e8ba4a67a90f0f2",
+      "binary": "katana"
+    },
+    {
+      "id": "naabu",
+      "repository": "projectdiscovery/naabu",
+      "version": "v2.7.0",
+      "url": "https://github.com/projectdiscovery/naabu/releases/download/v2.7.0/naabu_2.7.0_linux_arm64.zip",
+      "asset": "naabu_2.7.0_linux_arm64.zip",
+      "sha256": "e88af9bbfd777e2ffab6f84696747ba74de98fafeda882c078d158a610dbd86e",
+      "binary": "naabu"
+    },
+    {
+      "id": "nuclei",
+      "repository": "projectdiscovery/nuclei",
+      "version": "v3.11.1",
+      "url": "https://github.com/projectdiscovery/nuclei/releases/download/v3.11.1/nuclei_3.11.1_linux_arm64.zip",
+      "asset": "nuclei_3.11.1_linux_arm64.zip",
+      "sha256": "8044e3d9768ba0a744b2872c1a87e813006f013da97ca9f50f7661a4203bec07",
+      "binary": "nuclei"
+    },
+    {
+      "id": "tlsx",
+      "repository": "projectdiscovery/tlsx",
+      "version": "v1.4.0",
+      "url": "https://github.com/projectdiscovery/tlsx/releases/download/v1.4.0/tlsx_1.4.0_linux_arm64.zip",
+      "asset": "tlsx_1.4.0_linux_arm64.zip",
+      "sha256": "b757125d94c7d0e1f1f109534f0ed88d2a4b1c3856e1fa35efc1ef9e36781b0e",
+      "binary": "tlsx"
+    },
+    {
+      "id": "crlfuzz",
+      "repository": "dwisiswant0/crlfuzz",
+      "version": "v1.4.1",
+      "url": "https://github.com/dwisiswant0/crlfuzz/releases/download/v1.4.1/crlfuzz_1.4.1_linux_arm64.tar.gz",
+      "asset": "crlfuzz_1.4.1_linux_arm64.tar.gz",
+      "sha256": "6f0de652a71827329dbcab504702e4a4464611c99fca2fd1ebd4ed062c58f060",
+      "binary": "crlfuzz"
+    },
+    {
+      "id": "kiterunner",
+      "repository": "assetnote/kiterunner",
+      "version": "v1.0.2",
+      "url": "https://github.com/assetnote/kiterunner/releases/download/v1.0.2/kiterunner_1.0.2_linux_arm64.tar.gz",
+      "asset": "kiterunner_1.0.2_linux_arm64.tar.gz",
+      "sha256": "ec763297e1a9da49c06fc7853418e5839b03b2326204e7d2dde592f521eddd28",
+      "binary": "kr"
+    },
+    {
+      "id": "trufflehog",
+      "repository": "trufflesecurity/trufflehog",
+      "version": "v3.99.9",
+      "url": "https://github.com/trufflesecurity/trufflehog/releases/download/v3.99.9/trufflehog_3.99.9_linux_arm64.tar.gz",
+      "asset": "trufflehog_3.99.9_linux_arm64.tar.gz",
+      "sha256": "778b1913196dc9b9234e8fd366f64387efeb08c01930a1d2110dcb2ffd07e68b",
+      "binary": "trufflehog"
+    },
+    {
+      "id": "feroxbuster",
+      "repository": "epi052/feroxbuster",
+      "version": "v2.14.0",
+      "url": "https://github.com/epi052/feroxbuster/releases/download/v2.14.0/aarch64-linux-feroxbuster.zip",
+      "asset": "aarch64-linux-feroxbuster.zip",
+      "sha256": "8b3c30a2baf249963331ac1f9417e44eeadc00774b127e2452786a4f32a9a7ea",
+      "binary": "feroxbuster"
+    },
+    {
+      "id": "findomain",
+      "repository": "Findomain/Findomain",
+      "version": "11.0.0",
+      "url": "https://github.com/Findomain/Findomain/releases/download/11.0.0/findomain-aarch64-musl.zip",
+      "asset": "findomain-aarch64-musl.zip",
+      "sha256": "395c2b1f8aff9ab59f667c6d9f3e205e1c78b6f3d93f7db4d0256ec6f80a152b",
+      "binary": "findomain"
+    }
+  ],
+  "go": [
+    {
+      "id": "assetfinder",
+      "module": "github.com/tomnomnom/assetfinder",
+      "version": "v0.1.1"
+    },
+    {
+      "id": "hakrawler",
+      "module": "github.com/hakluke/hakrawler",
+      "version": "v0.0.0-20260805040537-52a16fe61bd1"
+    },
+    {
+      "id": "waybackurls",
+      "module": "github.com/tomnomnom/waybackurls",
+      "version": "v0.1.0"
+    }
+  ],
+  "python": [
+    {
+      "id": "arjun",
+      "version": "2.2.7",
+      "source": "https://pypi.org/project/arjun/"
+    },
+    {
+      "id": "semgrep",
+      "version": "1.185.0",
+      "source": "https://pypi.org/project/semgrep/"
+    },
+    {
+      "id": "wafw00f",
+      "version": "2.4.2",
+      "source": "https://pypi.org/project/wafw00f/"
+    },
+    {
+      "id": "uv",
+      "version": "0.13.9",
+      "source": "https://pypi.org/project/uv/"
+    }
+  ],
+  "sources": [
+    {
+      "id": "netexec",
+      "repository": "Pennyw0rth/NetExec",
+      "commit": "df95344dad7a932af7a0a30cbf9aa0f9d3a97abe"
+    },
+    {
+      "id": "theHarvester",
+      "repository": "laramies/theHarvester",
+      "commit": "b9b00561a66b4a2c829c606403a4765f3fff1ae9"
+    }
+  ],
+  "metasploit": {
+    "repository": "rapid7/metasploit-framework",
+    "commit": "268d60309c55b8abbfbf54002f533a9513615450"
+  }
+}

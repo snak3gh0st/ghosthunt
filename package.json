@@ -1,0 +1,37 @@
+{
+  "name": "ghosthunt-web",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "web": "tsx src/bounty/server.ts",
+    "web:setup": "node scripts/setup-bounty.mjs",
+    "web:build": "npm run build && npm --prefix dashboard run build",
+    "web:start": "node dist/bounty/server.js",
+    "test": "vitest run tests/bounty",
+    "test:web:browser": "node scripts/bounty-browser-test.mjs",
+    "test:web:terminal": "node scripts/bounty-terminal-browser-test.mjs",
+    "test:web:investigation": "node scripts/bounty-investigation-browser-test.mjs",
+    "isolation:prepare": "node scripts/prepare-isolation.mjs",
+    "test:isolation": "node scripts/bounty-isolation-smoke.mjs",
+    "test:vpn": "node scripts/bounty-vpn-smoke.mjs",
+    "test:arsenal": "node scripts/bounty-arsenal-smoke.mjs",
+    "test:source-scanners": "node scripts/bounty-source-scanners-smoke.mjs"
+  },
+  "dependencies": {
+    "@fastify/static": "10.1.11",
+    "@modelcontextprotocol/client": "2.4.0",
+    "dotenv": "17.3.1",
+    "fastify": "5.12.8",
+    "openai": "6.32.0",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "25.5.0",
+    "playwright": "1.60.0",
+    "tsx": "4.21.0",
+    "typescript": "5.9.3",
+    "vitest": "4.1.0"
+  }
+}

@@ -19,3 +19,8 @@ gh.py
 __pycache__/
 *.pyc
 .DS_Store
+
+# Web command center build and local dependencies
+node_modules/
+dist/
+dashboard/dist/
